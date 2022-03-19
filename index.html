@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login and SignUp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="form">
+            <form class="register-form">
+                <input id="id" type="text" placeholder="Email Id" />
+                <input id="password" type="text" placeholder="Password" />
+                <input id="confirmpassword" type="text" placeholder="Confirm Password" />
+                <button  onclick="signup()">SignUp</button>
+                <p class="message">Already have an account? <a href="#"> Login</a></p>
+            </form>
+
+
+            <form class="login-form">
+                <input id="loginid" type="text" placeholder="Email Id" />
+                <input id="loginpassword" type="password" placeholder="Password" />
+                <a href="#">Forget Password?</a></p>
+
+                <button onclick="login()">Login</button>
+                <p class="message">New User? <a href="#">Signup</a></p>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function login() {
+            let email = document.getElementById("loginid").value;
+            let password = document.getElementById("loginpassword").value;
+            
+            const userAction = async () => {
+                const response = await fetch('http://localhost:8080/login', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "emailId" : email,
+                        "password" : password
+                    } ),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const myJson = await response.text();
+                alert(myJson)
+            }
+            userAction();
+        }
+        function signup(){
+            let email = document.getElementById("id").value;
+            let password = document.getElementById("password").value;
+            let confirmpassword = document.getElementById("confirmpassword").value;
+            if(password != confirmpassword){
+                alert("password not matched");
+                return "";
+            }
+            const signupAction = async () => {
+                const response = await fetch('http://localhost:8080/signup', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "emailId" : email,
+                        "password" : password
+                    } ),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const myJson = await response.text();
+                alert(myJson)
+            }
+            signupAction();
+        }
+
+        $('.message a').click(function () {
+            $('form').animate({ height: "toggle", opacity: "toggle" }, "slow");
+        });
+        $('form').submit(false);
+    </script>
+
+</body>
+
+</html>
